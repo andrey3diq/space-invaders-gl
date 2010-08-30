@@ -1,0 +1,8 @@
+Install and run info
+
+1. Install JOGL libs into maven repo:
+go to etc/common_libs folder and run mvn_install_common_libs.sh
+
+2. Compile project (mvn clean install -Dmaven.test.skip)
+
+3. go to space-invaders-gl-game folder and run "mvn scala:run" goal or run runGame.sh in space-invaders-gl folder. 

@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>com.xdev</groupId>
+    <artifactId>space-invaders-gl</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <name>${pom.artifactId}</name>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>space-invaders-gl-game</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>sengine-2d</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.specs</groupId>
+      <artifactId>specs</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+       <groupId>net.java.dev.jogl</groupId>
+       <artifactId>jogl</artifactId>
+     </dependency>
+ 
+     <dependency>
+       <groupId>net.java.dev.jogl</groupId>
+       <artifactId>gluegen-rt</artifactId>
+     </dependency>
+
+   </dependencies>
+
+  <build>
+    <sourceDirectory>src/main/scala</sourceDirectory>
+    <testSourceDirectory>src/test/scala</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+          <args>
+            <arg>-target:jvm-1.5</arg>
+            <arg>-unchecked</arg>
+            <arg>-deprecation</arg>
+            <arg>-explaintypes</arg>
+           </args>
+        </configuration>
+      </plugin>
+    
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <configuration>
+        <archive>
+          <manifest>
+            <addClasspath>true</addClasspath>
+            <classpathPrefix>lib/</classpathPrefix>
+            <mainClass>com.xdev.si.Game</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+    </plugin>
+
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <executions>
+
+        <execution>
+          <id>copy-dependencies</id>
+          <phase>package</phase>
+          <goals>
+            <goal>copy-dependencies</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>target/lib</outputDirectory>
+          </configuration>
+        </execution>
+        
+        </executions>
+    </plugin>
+
+  </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+          <launchers>
+            <launcher>
+              <id>Scala Launcher</id>
+              <mainClass>com.xdev.si.Game</mainClass>
+              <!-- args are optional -->
+              <args>
+                <arg>arg1</arg>
+              </args>
+              <!-- jvmArgs are optional -->
+              <jvmArgs>
+                <jvmArg>-Xmx128m</jvmArg>
+                <jvmArg>-Djava.library.path=../etc/gl_native_libs/</jvmArg>
+              </jvmArgs>
+            </launcher>
+            <!-- you could define other launcher -->
+          </launchers>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </reporting>
+
+</project>
