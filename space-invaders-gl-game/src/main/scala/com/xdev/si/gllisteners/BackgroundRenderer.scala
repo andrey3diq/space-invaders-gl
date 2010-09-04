@@ -14,6 +14,7 @@ import com.xdev.engine.sprite.Sprite
 
 class BackgroundRenderer extends GLEventListener2D with LogHelper {
   var background: Sprite = null
+
   def onInit(gl: GL): Unit = {
     background = ResourceFactory.getSprite(Game.BACKGROUND_SPRITE)
   }

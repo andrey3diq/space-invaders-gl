@@ -19,7 +19,7 @@ object Game extends GLGameWindow("Space Invaders GL - Scala version 1.0", 800, 6
   val SHOT_SPRITE = "/sprites/shot.gif"
   val ALIEN_SPRITE_0 = "/sprites/alien.gif"
   val ALIEN_SPRITE_1 = "/sprites/alien2.gif"
-  val BACKGROUND_SPRITE = "/sprites/space.jpg"
+  val BACKGROUND_SPRITE = "/sprites/space.png"
 
   val EXPL_TILE_MAP = "/sprites/exp1.png"
   var explTileMap:TileMap = null
