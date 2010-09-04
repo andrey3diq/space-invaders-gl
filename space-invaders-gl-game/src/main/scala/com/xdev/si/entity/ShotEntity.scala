@@ -10,7 +10,7 @@ import com.xdev.engine.sprite.Sprite
  */
 object ShotEntity{
   var lastFire: Long = 0
-  val firingInterval: Long = 250
+  val firingInterval: Long = 500
   val START_VELOCITY_Y = -350
 }
 class ShotEntity(sprite : Sprite, listener: MainRenderer, cx: Float, cy: Float) extends AbstractEntity(sprite, cx, cy){

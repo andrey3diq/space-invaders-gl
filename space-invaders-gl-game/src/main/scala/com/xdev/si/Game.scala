@@ -11,6 +11,8 @@ object Game extends GLGameWindow("Space Invaders GL - Scala version 1.0", 800, 6
 
   val WND_WIDTH = 800
   val WND_HEIGHT = 600
+  var CURRENT_LEVEL = 1
+  var SCORE = 0
 
   val PRESS_ANY_KEY_SPRITE = "/sprites/pressanykey.gif"
   val WIN_SPRITE = "/sprites/youwin.gif"

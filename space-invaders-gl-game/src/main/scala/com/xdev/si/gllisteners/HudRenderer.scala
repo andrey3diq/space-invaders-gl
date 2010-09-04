@@ -5,6 +5,7 @@ import javax.media.opengl.GL
 import com.sun.opengl.util.j2d.TextRenderer
 import java.awt.Font
 import com.xdev.engine.gl.render.GLEventListener2D
+import com.xdev.si.Game
 
 /**
  * Created by User: xdev
@@ -23,7 +24,9 @@ class HudRenderer extends GLEventListener2D with LogHelper {
   def onRenderFrame(gl: GL, w: Int, h: Int): Unit = {
     textRenderer.beginRendering(w, h);
     textRenderer.setColor(1f, 1f, 0f, 1f);
-    textRenderer.draw(String.valueOf("fps count : " + fps), 10, 20);
+    textRenderer.draw("fps count : %d".format(fps), 10, 20);
+    textRenderer.setColor(0f, 1f, 0f, 1f);
+    textRenderer.draw("level : %d score : %d".format(Game.CURRENT_LEVEL, Game.SCORE), 10, Game.WND_HEIGHT - 25);
     textRenderer.endRendering();
   }
 }

@@ -17,6 +17,8 @@ import com.xdev.engine.gl.render.GLEventListener2D
 
 class MainRenderer extends GLEventListener2D with LogHelper{
 
+  private val SCORE_LOSE_PENALTY = 1000
+
   private var ship: AbstractEntity = null
   private val moveSpeed: Float = 250.0f
 
@@ -42,8 +44,6 @@ class MainRenderer extends GLEventListener2D with LogHelper{
   def onRenderFrame(gl: GL, w: Int, h: Int): Unit = {
 
   processKeyboard()
-  if (aliens.length == 0)notifyWin()
-
   if (!waitingForKeyPress) {
     if (logicRequiredThisLoop) {
       logicRequiredThisLoop = false
@@ -52,7 +52,11 @@ class MainRenderer extends GLEventListener2D with LogHelper{
     aliens.foreach(_.move(delta))
     shots.foreach(_.move(delta))
     ship.move(delta)
-  } else ResourceFactory.getSprite(message).draw(gl, 325,250)
+  } else {
+    ResourceFactory.getSprite(message).draw(gl, 325,250)
+    return
+  }
+  if (aliens.length == 0)notifyWin()
 
   // Collision detection shot with enemies
   checkCollisions()
@@ -96,17 +100,22 @@ class MainRenderer extends GLEventListener2D with LogHelper{
     shots.clear()
     message = Game.WIN_SPRITE
     waitingForKeyPress = true
+    Game.CURRENT_LEVEL += 1
   }
 
   def notifyDeath():Unit={
     message = Game.GAME_OVER_SPRITE
     waitingForKeyPress = true
+    if(Game.SCORE >= SCORE_LOSE_PENALTY ){
+      Game.SCORE -= SCORE_LOSE_PENALTY
+    }else Game.SCORE = 0 
   }
   /**
      * Notification that an alien has been killed
      */
   def notifyAlienKilled(): Unit = {
-      aliens.foreach(_.runFaster())
+    aliens.foreach(_.runFaster())
+    Game.SCORE += 100
   }
   /**
      * Attempt to fire a shot from the player. Its called "try"

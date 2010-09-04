@@ -15,7 +15,7 @@ class AlienEntity(sprite: Sprite, listener: MainRenderer, cx: Float, cy: Float) 
   var currentAnimation = Game.ENEMY_ANIMATION
   var frameDuration = 250
   //Change started velocity
-  vx = -100.0f
+  vx = -50.0f * Game.CURRENT_LEVEL
 
   /** The time since the last frame change took place */
   var lastFrameChange: Long = 0;
