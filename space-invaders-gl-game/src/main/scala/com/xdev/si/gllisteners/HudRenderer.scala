@@ -22,11 +22,11 @@ class HudRenderer extends GLEventListener2D with LogHelper {
   }
 
   def onRenderFrame(gl: GL, w: Int, h: Int): Unit = {
-    textRenderer.beginRendering(w, h);
-    textRenderer.setColor(1f, 1f, 0f, 1f);
-    textRenderer.draw("fps count : %d".format(fps), 10, 20);
-    textRenderer.setColor(0f, 1f, 0f, 1f);
-    textRenderer.draw("level : %d score : %d".format(Game.CURRENT_LEVEL, Game.SCORE), 10, Game.WND_HEIGHT - 25);
-    textRenderer.endRendering();
+    textRenderer.beginRendering(w, h)
+    textRenderer.setColor(1f, 1f, 0f, 1f)
+    textRenderer.draw("fps count : %d".format(fps), 10, 20)
+    textRenderer.setColor(0f, 1f, 0f, 1f)
+    textRenderer.draw("level : %d score : %d".format(Game.CURRENT_LEVEL, Game.SCORE), 10, Game.WND_HEIGHT - 25)
+    textRenderer.endRendering()
   }
 }
