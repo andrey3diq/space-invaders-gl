@@ -75,10 +75,11 @@ object Keyboard{
             return;
           }
 
-          val nextPress = Toolkit.getDefaultToolkit().getSystemEventQueue().peekEvent(KeyEvent.KEY_PRESSED).asInstanceOf[KeyEvent]
-          if ((nextPress == null) || (nextPress.getWhen() != e.getWhen())) {
+          // AK: I don't understand what is checking here, but i have "lags" with ship moving when next conditions are uncommented  
+//          val nextPress = Toolkit.getDefaultToolkit().getSystemEventQueue().peekEvent(KeyEvent.KEY_PRESSED).asInstanceOf[KeyEvent]
+//          if ((nextPress == null) || (nextPress.getWhen() != e.getWhen())) {
             keys(e.getKeyCode()) = false;
-          }
+//          }
         }
 
         /**

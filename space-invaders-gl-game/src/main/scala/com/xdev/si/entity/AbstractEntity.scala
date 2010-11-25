@@ -16,8 +16,8 @@ abstract class AbstractEntity(sprite : Sprite, cx: Float, cy: Float) {
   val width = sprite.getWidth()
   val height = sprite.getHeight()
   //Velocity
-  var vx: Float = 0.0f
-  var vy: Float = 0.0f
+  protected var vx: Float = 0.0f
+  protected var vy: Float = 0.0f
   //Bounding boxes
   private val thisBoundBox : Rectangle  = new Rectangle(cx.asInstanceOf[Int], cy.asInstanceOf[Int], width, height)
   private val targetBoundBox : Rectangle  = new Rectangle()
@@ -36,6 +36,16 @@ abstract class AbstractEntity(sprite : Sprite, cx: Float, cy: Float) {
     y = y + (vy * delta) / 1000.0f
     thisBoundBox.x = x.asInstanceOf[Int]
     thisBoundBox.y = y.asInstanceOf[Int]
+  }
+
+  def accelerate(dx: Float, dy: Float){
+    vx += dx
+    vy += dy
+  }
+
+  def stop(){
+    vx = 0
+    vy = 0
   }
 
   def draw(gl: GL) = sprite.draw(gl, x, y)

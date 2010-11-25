@@ -84,6 +84,7 @@ class MainRenderer extends GLEventListener2D with LogHelper{
     if(aliens.length == maxEnemyCount)return
     aliens.clear()
 		initEntities()
+    waitingForKeyPress = false    
   }
 
   private def initEntities(): Unit = {
@@ -132,27 +133,45 @@ class MainRenderer extends GLEventListener2D with LogHelper{
       shots += new ShotEntity(ResourceFactory.getSprite(Game.SHOT_SPRITE), this, ship.x + 10, ship.y - 30)
     }
 
+  // TODO: Move processKeyboard method to right place. It is hard to understand why Keyboard processor placed in renderer.
   private def processKeyboard(): Unit = {
     //Process keyboard
     val leftPressed = Keyboard.isPressed(KeyEvent.VK_LEFT)
     val rightPressed = Keyboard.isPressed(KeyEvent.VK_RIGHT)
     val firePressed = Keyboard.isPressed(KeyEvent.VK_SPACE)
 
-    ship.vx = 0.0f;
-    if (!waitingForKeyPress) {
-      if (leftPressed && !rightPressed) {
-         ship.vx = -moveSpeed
-      } else if (rightPressed && !leftPressed) {
-         ship.vx = moveSpeed
-      }
-      if (firePressed) tryToFire()
-    }else{
-      if(!firePressed)fireHasBeenReleased = true
-      if ((firePressed) && (fireHasBeenReleased)) {
-        waitingForKeyPress = false
-        fireHasBeenReleased = false
+    DebugRenderer.setTextForDebugging("left: " + leftPressed + "right: " + rightPressed + "fire: " + firePressed)
+    
+    ship.stop();
+    if(leftPressed){
+      ship.accelerate(-moveSpeed, 0)
+    }
+    if(rightPressed){
+      ship.accelerate(moveSpeed, 0)
+    }
+    if(firePressed){
+      if(waitingForKeyPress){
         newGame()
+      }else{
+        tryToFire();
       }
     }
+
+//    ship.vx = 0.0f;
+//    if (!waitingForKeyPress) {
+//      if (leftPressed && !rightPressed) {
+//         ship.vx = -moveSpeed
+//      } else if (rightPressed && !leftPressed) {
+//         ship.vx = moveSpeed
+//      }
+//      if (firePressed) tryToFire()
+//    }else{
+//      if(!firePressed)fireHasBeenReleased = true
+//      if ((firePressed) && (fireHasBeenReleased)) {
+//        waitingForKeyPress = false
+//        fireHasBeenReleased = false
+//        newGame()
+//      }
+//    }
   }
 }
