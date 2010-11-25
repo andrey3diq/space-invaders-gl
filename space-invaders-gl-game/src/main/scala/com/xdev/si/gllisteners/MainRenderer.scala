@@ -27,6 +27,12 @@ class MainRenderer extends GLEventListener2D with LogHelper{
   private var message: String = Game.PRESS_ANY_KEY_SPRITE
   /** True if the fire key has been released */
   private var fireHasBeenReleased = false;
+  /** True if the fire key has been pressed */
+  private var fireHasBeenPressed = false;
+  /** Used to determine if fire button was pressed then released */
+  private var prevFireState = false;
+  // AK: Now waitingForKeyPress var obviously used for determine if the game is in PAUSE state
+  // AK: TODO: create game states and avoid using waitingForKeyPress var or rename it to isGamePaused
   /** True if we're holding up game play until a key has been pressed */
   private var waitingForKeyPress = true
   private var logicRequiredThisLoop = false
@@ -38,7 +44,7 @@ class MainRenderer extends GLEventListener2D with LogHelper{
   def onInit(gl: GL): Unit = {
     debug("Initialize")
     ship = new ShipEntity(ResourceFactory.getSprite(Game.SHIP_SPRITE), 370, 550)
-    newGame()
+    //newGame()
   }
   //==========================================================
   def onRenderFrame(gl: GL, w: Int, h: Int): Unit = {
@@ -133,45 +139,59 @@ class MainRenderer extends GLEventListener2D with LogHelper{
       shots += new ShotEntity(ResourceFactory.getSprite(Game.SHOT_SPRITE), this, ship.x + 10, ship.y - 30)
     }
 
-  // TODO: Move processKeyboard method to right place. It is hard to understand why Keyboard processor placed in renderer.
+  // AK: TODO: Move processKeyboard method to right place. It is hard to understand why Keyboard processor placed in renderer.
   private def processKeyboard(): Unit = {
     //Process keyboard
+    if(waitingForKeyPress){
+      processKeyboardInPause()
+    }else{
+      processKeyboardInGame()
+    }
+  }
+
+  private def processKeyboardInPause() = {
+    val firePressed = Keyboard.isPressed(KeyEvent.VK_SPACE)
+
+    DebugRenderer.setTextForDebugging("In Pause| fire pressed: " + firePressed + " prev fire state: " + prevFireState + "\n\r" + "fireHasBeenPressed: " + fireHasBeenPressed + " fireHasBeenReleased: " + fireHasBeenReleased)
+
+    if(!prevFireState && firePressed){
+      fireHasBeenPressed = true
+      fireHasBeenReleased = false
+    }
+
+    if(prevFireState && !firePressed){
+      fireHasBeenReleased = true
+    }
+
+    if(fireHasBeenPressed && fireHasBeenReleased){
+      fireHasBeenPressed = false
+      fireHasBeenReleased = false
+      newGame()
+    }
+
+    prevFireState = firePressed;
+  }
+
+  private def processKeyboardInGame() = {
     val leftPressed = Keyboard.isPressed(KeyEvent.VK_LEFT)
     val rightPressed = Keyboard.isPressed(KeyEvent.VK_RIGHT)
     val firePressed = Keyboard.isPressed(KeyEvent.VK_SPACE)
 
-    DebugRenderer.setTextForDebugging("left: " + leftPressed + "right: " + rightPressed + "fire: " + firePressed)
-    
+    DebugRenderer.setTextForDebugging("In Game| left: " + leftPressed + " right: " + rightPressed + " fire: " + firePressed)
+
     ship.stop();
     if(leftPressed){
       ship.accelerate(-moveSpeed, 0)
     }
+
     if(rightPressed){
       ship.accelerate(moveSpeed, 0)
     }
+
     if(firePressed){
-      if(waitingForKeyPress){
-        newGame()
-      }else{
         tryToFire();
-      }
     }
 
-//    ship.vx = 0.0f;
-//    if (!waitingForKeyPress) {
-//      if (leftPressed && !rightPressed) {
-//         ship.vx = -moveSpeed
-//      } else if (rightPressed && !leftPressed) {
-//         ship.vx = moveSpeed
-//      }
-//      if (firePressed) tryToFire()
-//    }else{
-//      if(!firePressed)fireHasBeenReleased = true
-//      if ((firePressed) && (fireHasBeenReleased)) {
-//        waitingForKeyPress = false
-//        fireHasBeenReleased = false
-//        newGame()
-//      }
-//    }
+    prevFireState = firePressed;
   }
 }
